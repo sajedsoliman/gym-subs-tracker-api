@@ -1,0 +1,65 @@
+scalar DateType
+
+### Custom Declarations
+
+enum Positions {
+	student
+	adult
+}
+
+type Member {
+	id: ID!
+	name: String!
+	phone: String
+	position: String!
+	enrollmentDate: DateType!
+}
+
+input MemberInputs {
+	name: String!
+	phone: String
+	position: Positions!
+}
+
+input UpdateMemberInputs {
+	name: String
+	phone: String
+	position: Positions
+}
+
+type Subscription {
+	id: ID!
+	member: Member!
+	startingDate: DateType!
+	expiringDate: DateType!
+	amount: Int!
+	isPaid: Boolean!
+}
+
+input SubscriptionInputs {
+	member: ID!
+	expiringDate: DateType!
+	amount: Int!
+	isPaid: Boolean!
+}
+
+### Top-Level Declarations
+
+type Query {
+	members(name: String): [Member!]!
+	subscriptions(
+		memberName: String
+		paidStatus: Boolean
+		day: Int
+		month: Int
+		year: Int
+	): [Subscription!]!
+}
+
+type Mutation {
+	createMember(member: MemberInputs!): Member
+	updateMember(member: UpdateMemberInputs!, id: ID!): Member
+	createSubscription(subscription: SubscriptionInputs!): Subscription
+	paySubscription(id: ID!): Subscription
+	cancelSubscription(id: ID!): Subscription
+}
